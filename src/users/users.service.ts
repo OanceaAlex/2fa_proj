@@ -23,6 +23,14 @@ export class UsersService {
         return foundUser;
     }
 
+    async findOneByName(username: string) {
+        const foundUser = await this.userRepository.findOneBy({username: username});
+        if (!foundUser) {
+            throw new NotFoundException(`User with name "${username}" not found.`);
+        }
+        return foundUser;
+    }
+
     async create(createUserDto: CreateUserDto) {
         const createdUser = this.userRepository.create(createUserDto);
         return this.userRepository.save(createdUser);
