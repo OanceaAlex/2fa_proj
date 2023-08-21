@@ -19,6 +19,7 @@ async function bootstrap() {
   const swaggerOptions = new DocumentBuilder()
     .setTitle('2fa test platform')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions);
