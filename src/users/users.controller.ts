@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Public } from 'src/common/decorators/public-decorator';
 
 @Controller('users')
 export class UsersController {
@@ -10,7 +11,7 @@ export class UsersController {
         private readonly usersService: UsersService
     ){};
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard) 
     @ApiBearerAuth()
     @Get()
     findAll() {
@@ -31,6 +32,7 @@ export class UsersController {
         return this.usersService.create(createUserDto);
     }
 
+    @Public()
     @Post('register')
     register(@Body() createUserDto: CreateUserDto) {
         return this.usersService.register(createUserDto);
