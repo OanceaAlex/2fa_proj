@@ -26,9 +26,14 @@ export class UsersController {
 
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
-    @Post()
+    @Post('create')
     create(@Body() createUserDto: CreateUserDto) {
         return this.usersService.create(createUserDto);
+    }
+
+    @Post('register')
+    register(@Body() createUserDto: CreateUserDto) {
+        return this.usersService.register(createUserDto);
     }
 
     @UseGuards(JwtAuthGuard)
