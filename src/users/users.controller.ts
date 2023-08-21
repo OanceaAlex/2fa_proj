@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Request, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -33,6 +34,10 @@ export class UsersController {
         return this.usersService.remove(id);
     }
 
-    
+    @UseGuards(JwtAuthGuard)
+    @Post('/profile')
+    getProfile(@Request() req){
+        return req.user;
+    }
 
 }

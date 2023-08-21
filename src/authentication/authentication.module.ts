@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import appConfig from 'src/config/app.config';
 import { jwtConfig } from 'src/config/jwt.config';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { jwtConfig } from 'src/config/jwt.config';
     JwtModule.registerAsync(jwtConfig)
   ],
   controllers: [AuthenticationController],
-  providers: [AuthenticationService, LocalStrategy],
+  providers: [AuthenticationService, LocalStrategy, JwtStrategy],
+  exports: [AuthenticationService],
 })
 export class AuthenticationModule {}
