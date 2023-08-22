@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, IsNull, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -13,4 +13,10 @@ export class User {
 
     @Column()
     password: string;
+
+    @Column({
+        type: String,
+        nullable: true,
+    })
+    twoFactorAuthSecret!: string | null;
 }

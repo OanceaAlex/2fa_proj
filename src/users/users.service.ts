@@ -68,4 +68,8 @@ export class UsersService {
         return this.userRepository.remove(userToRemove);
     }
 
+    async setTwoFactorAuthSecret(secret: string, userId: number){
+        await this.userRepository.update({id: userId}, {twoFactorAuthSecret: secret});
+    }
+
 }
