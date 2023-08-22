@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/users/entities/user.entity/user.entity';
 import { authenticator } from 'otplib';
+import { toDataURL } from 'qrcode';
 
 @Injectable()
 export class AuthenticationService {
@@ -34,7 +35,7 @@ export class AuthenticationService {
     async generateTwoFactorAuthSecret(user: User) {
         const secret = authenticator.generateSecret();
         const otpAuthUrl = authenticator.keyuri(user.email, 'AUTH_APPLICATION', secret);
-
+        console.log(user.email);
         await this.usersService.setTwoFactorAuthSecret(secret, user.id);
 
         return {
@@ -42,4 +43,16 @@ export class AuthenticationService {
             otpAuthUrl,
         }
     }
+
+    async generateQrCodeDataUrl(otpAuthUrl: string) {
+        return toDataURL(otpAuthUrl);
+    }
+
+    isTwoFactorAuthCodeValid(twoFactorAuthCode: string, user:User){
+        return authenticator.verify({
+            token: twoFactorAuthCode,
+            secret: user.twoFactorAuthSecret,
+        });
+    }
+
 }

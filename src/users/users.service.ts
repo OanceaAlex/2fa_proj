@@ -4,6 +4,7 @@ import { User } from './entities/user.entity/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import * as bcrypt from 'bcrypt'
+import { authenticator } from 'otplib';
 
 @Injectable()
 export class UsersService {
@@ -39,7 +40,6 @@ export class UsersService {
             ...createUserDto,
             password: hashedPassword,
         };
-        console.log(userToCreate);
         const createdUser = this.userRepository.create(userToCreate);
         return this.userRepository.save(createdUser);
     }
@@ -70,6 +70,10 @@ export class UsersService {
 
     async setTwoFactorAuthSecret(secret: string, userId: number){
         await this.userRepository.update({id: userId}, {twoFactorAuthSecret: secret});
+    }
+    
+    async turnOnTwoFactorAuth(userId: number){
+        await this.userRepository.update({id: userId}, {isTwoFactorAuthEnabled: true});
     }
 
 }
