@@ -4,6 +4,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Public } from 'src/common/decorators/public-decorator';
+import { Jwt2faAuthGuard } from 'src/common/guards/jwt-2fa-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -56,6 +57,13 @@ export class UsersController {
     @ApiBearerAuth()
     @Post('/profile')
     getProfile(@Request() req){
+        return req.user;
+    }
+
+    @UseGuards(Jwt2faAuthGuard)
+    @ApiBearerAuth()
+    @Post('/test')
+    getTest(@Request() req) {
         return req.user;
     }
 

@@ -9,6 +9,7 @@ import { UsersService } from 'src/users/users.service';
 import appConfig from 'src/config/app.config';
 import { jwtConfig } from 'src/config/jwt.config';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { jwt2faStrategy } from './strategies/jwt-2fa.strategy';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     JwtModule.registerAsync(jwtConfig)
   ],
   controllers: [AuthenticationController],
-  providers: [AuthenticationService, LocalStrategy, JwtStrategy],
+  providers: [AuthenticationService, LocalStrategy, JwtStrategy, jwt2faStrategy],
   exports: [AuthenticationService],
 })
 export class AuthenticationModule {}

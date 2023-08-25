@@ -32,10 +32,24 @@ export class AuthenticationService {
         }
     }
 
+    async loginWith2fa(userWithoutPass: Partial<User>){
+        console.log(userWithoutPass);
+        const payload = {
+            username: userWithoutPass.username,
+            sub: userWithoutPass.id,
+            isTwoFactorAuthEnabled: userWithoutPass.isTwoFactorAuthEnabled,
+            isTwoFactorAuthenticated: true,
+        };
+
+        return {
+            username: payload.username,
+            access_token: this.jwtService.sign(payload)
+        }
+    }
+
     async generateTwoFactorAuthSecret(user: User) {
         const secret = authenticator.generateSecret();
         const otpAuthUrl = authenticator.keyuri(user.email, 'AUTH_APPLICATION', secret);
-        console.log(user.email);
         await this.usersService.setTwoFactorAuthSecret(secret, user.id);
 
         return {
