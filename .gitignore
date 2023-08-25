@@ -37,3 +37,5 @@ lerna-debug.log*
 #Env
 *.env
 docker-compose.yml
+
+pgdata

@@ -14,22 +14,22 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
   imports: [
     AuthenticationModule,
     UsersModule,
+    ConfigModule.forRoot({
+      load: [appConfig],
+      isGlobal: true,
+    }),
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         type: 'postgres',
         host: process.env.DATABASE_HOST,
         port: +process.env.DATABASE_PORT,
         username: process.env.DATABASE_USER,
-        password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
+        password: process.env.DATABASE_PASSWORD,
         autoLoadEntities: true,
         synchronize: true,
       })
     }),
-    ConfigModule.forRoot({
-      load: [appConfig],
-      isGlobal: true,
-    }) 
     ],
   controllers: [AppController],
   providers: [
