@@ -12,59 +12,75 @@ export class UsersController {
         private readonly usersService: UsersService
     ){};
 
-    @UseGuards(JwtAuthGuard) 
+    // Return all users from DB
+    @UseGuards(Jwt2faAuthGuard) 
     @ApiBearerAuth()
     @Get()
     findAll() {
         return this.usersService.findAll();
     }
 
-    @UseGuards(JwtAuthGuard)
+    // Search and return user by DB id
+    @UseGuards(Jwt2faAuthGuard)
     @ApiBearerAuth()
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id:string) {
         return this.usersService.findOne(id);
     }
 
-    @UseGuards(JwtAuthGuard)
+    // Force add user in DB regardless of other users
+    @UseGuards(Jwt2faAuthGuard)
     @ApiBearerAuth()
     @Post('create')
     create(@Body() createUserDto: CreateUserDto) {
         return this.usersService.create(createUserDto);
     }
 
+    // Sign up user and store in DB
     @Public()
     @Post('register')
     register(@Body() createUserDto: CreateUserDto) {
         return this.usersService.register(createUserDto);
     }
 
-    @UseGuards(JwtAuthGuard)
+    // Update user data in db for user with matching id
+    @UseGuards(Jwt2faAuthGuard)
     @ApiBearerAuth()
     @Patch(':id')
     update(@Param('id', ParseIntPipe) id:string, @Body() createUserDto: CreateUserDto) {
         return this.usersService.update(id, createUserDto);
     }
 
-    @UseGuards(JwtAuthGuard)
+    // Delete user with mathcing id from db
+    @UseGuards(Jwt2faAuthGuard)
     @ApiBearerAuth()
     @Delete(':id')
     remove(@Param('id', ParseIntPipe) id:string) {
         return this.usersService.remove(id);
     }
 
+    // Show info about current authenticated user, aka extract data from jwt token
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
     @Post('/profile')
     getProfile(@Request() req){
-        return req.user;
+        return {
+            userid:req.user.id,
+            username:req.user.username,
+            isTwoFactorAuthEnabled:req.user.isTwoFactorAuthEnabled,
+        };
     }
 
-    @UseGuards(Jwt2faAuthGuard)
-    @ApiBearerAuth()
-    @Post('/test')
-    getTest(@Request() req) {
-        return req.user;
-    }
+    // test endpoin for 2fa fwt token
+    // @UseGuards(Jwt2faAuthGuard)
+    // @ApiBearerAuth()
+    // @Post('/test')
+    // getTest(@Request() req) {
+    //     return {
+    //         userid:req.user.id,
+    //         username:req.user.username,
+    //         isTwoFactorAuthEnabled:req.user.isTwoFactorAuthEnabled,
+    //     };
+    // }
 
 }

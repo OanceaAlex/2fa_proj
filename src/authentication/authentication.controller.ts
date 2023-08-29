@@ -17,14 +17,18 @@ export class AuthenticationController {
     private readonly usersService: UsersService,
     ) {}
 
+
+  // login simple. returns basic jwt token
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req, @Body() loginUserDto: LoginUserDto) {
     return this.authenticationService.login(req.user);
   }
 
+  // turns on 2fa for user
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @HttpCode(200)
   @Post('2fa/turn-on')
   async turnOnTwoFactorAuth(@Req() request, @Body() body: OtpCodeDto){
     const isValid = this.authenticationService.isTwoFactorAuthCodeValid(
@@ -37,13 +41,16 @@ export class AuthenticationController {
     await this.usersService.turnOnTwoFactorAuth(request.user.id);
   }
 
+  // turns off 2fa for user
   @UseGuards(Jwt2faAuthGuard)
   @ApiBearerAuth()
   @Post('2fa/turn-off')
+  @HttpCode(200)
   async turnOffTwoFactorAuth(@Req() request) {
     return await this.usersService.turnOffTwoFactorAuth(request.user.id);
   }
   
+  // generates 2fa uri for google otp
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Post('2fa/generate')
@@ -51,10 +58,11 @@ export class AuthenticationController {
     return await this.authenticationService.generateTwoFactorAuthSecret(request.user);
   }
 
+  // login w/ 2fa. Returns 2fa jwt token
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @HttpCode(200)
-  @Post('2fa/authenticate')
+  @Post('2fa/login-2fa')
   async authenticate2fa(@Request() request, @Body() body: OtpCodeDto){
     const isValid = this.authenticationService.isTwoFactorAuthCodeValid(
       body.twoFactorAuthCode,

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import appConfig from "src/config/app.config";
@@ -19,7 +19,8 @@ export class jwt2faStrategy extends PassportStrategy(Strategy, 'jwt-2fa') {
         const {password, ...userWithoutPass} = user;
 
         if (!userWithoutPass.isTwoFactorAuthEnabled){
-            return userWithoutPass;
+            // return userWithoutPass;
+            throw new UnauthorizedException('User must have 2fa Enabled');
         }
         if (payload.isTwoFactorAuthenticated) {
             return userWithoutPass;
