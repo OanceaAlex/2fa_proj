@@ -3,6 +3,7 @@ export default () => ({
     database: {
         host: process.env.DATABASE_HOST,
         port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
+        username: process.env.DATABASE_USER,
         name: process.env.DATABASE_NAME,
         pass: process.env.DATABASE_PASSWORD,
     },

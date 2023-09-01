@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from './config/app.config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
@@ -19,16 +19,18 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: () => ({
+      imports:[ConfigModule],
+      useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: process.env.DATABASE_HOST,
-        port: +process.env.DATABASE_PORT,
-        username: process.env.DATABASE_USER,
-        database: process.env.DATABASE_NAME,
-        password: process.env.DATABASE_PASSWORD,
+        host: configService.get<string>('database.host'),
+        port: configService.get<number>('database.port'),
+        username: configService.get<string>('database.username'),
+        database: configService.get<string>('database.name'),
+        password:configService.get<string>('database.pass'),
         autoLoadEntities: true,
-        synchronize: true,
-      })
+        synchronize: true,        
+      }),
+      inject:[ConfigService],
     }),
     ],
   controllers: [AppController],
