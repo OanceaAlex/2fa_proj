@@ -6,20 +6,21 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    transform: true,
-    transformOptions: {
-      enableImplicitConversion: true,
-    },
-  })
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
   );
 
   app.enableCors({
-    origin: "*",
-    methods: ['GET','DELETE','PATCH','POST'],
-  })
+    origin: '*',
+    methods: ['GET', 'DELETE', 'PATCH', 'POST'],
+  });
 
   const swaggerOptions = new DocumentBuilder()
     .setTitle('2fa test platform')
