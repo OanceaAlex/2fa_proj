@@ -16,6 +16,11 @@ async function bootstrap() {
   })
   );
 
+  app.enableCors({
+    origin: "*",
+    methods: ['GET','DELETE','PATCH','POST'],
+  })
+
   const swaggerOptions = new DocumentBuilder()
     .setTitle('2fa test platform')
     .setVersion('1.0')

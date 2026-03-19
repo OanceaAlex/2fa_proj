@@ -1,14 +1,14 @@
 import { Controller, Post, UseGuards, Request, Body, Req, UnauthorizedException, HttpCode } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { AuthGuard } from '@nestjs/passport';
-import { LoginUserDto } from 'src/users/dtos/login-user.dto';
-import { LocalAuthGuard } from 'src/common/guards/local-auth.guard';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { LoginUserDto } from '../users/dtos/login-user.dto';
+import { LocalAuthGuard } from '../common/guards/local-auth.guard';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 import { request } from 'http';
-import { OtpCodeDto } from 'src/users/dtos/otp-code.dto';
-import { Jwt2faAuthGuard } from 'src/common/guards/jwt-2fa-auth.guard';
+import { OtpCodeDto } from '../users/dtos/otp-code.dto';
+import { Jwt2faAuthGuard } from '../common/guards/jwt-2fa-auth.guard';
 
 @Controller('auth')
 export class AuthenticationController {

@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Request, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { Public } from 'src/common/decorators/public-decorator';
-import { Jwt2faAuthGuard } from 'src/common/guards/jwt-2fa-auth.guard';
+import { Public } from '../common/decorators/public-decorator';
+import { Jwt2faAuthGuard } from '../common/guards/jwt-2fa-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -70,17 +70,5 @@ export class UsersController {
             isTwoFactorAuthEnabled:req.user.isTwoFactorAuthEnabled,
         };
     }
-
-    // test endpoin for 2fa fwt token
-    // @UseGuards(Jwt2faAuthGuard)
-    // @ApiBearerAuth()
-    // @Post('/test')
-    // getTest(@Request() req) {
-    //     return {
-    //         userid:req.user.id,
-    //         username:req.user.username,
-    //         isTwoFactorAuthEnabled:req.user.isTwoFactorAuthEnabled,
-    //     };
-    // }
 
 }
